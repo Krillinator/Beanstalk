@@ -48,6 +48,8 @@ function StorageLogic() {
       if (value) {
         setDescription(value);
         setReady(true);
+      } else {
+        setReady(true);
       }
     });
   }, []);
