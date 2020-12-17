@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   PermissionsAndroid,
   Button,
   Animated,
@@ -41,7 +40,7 @@ function Permission() {
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 5000,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
   };
@@ -50,7 +49,7 @@ function Permission() {
     // Will change fadeAnim value to 0 in 5 seconds
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 5000,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
   };
@@ -58,7 +57,15 @@ function Permission() {
   return (
     <View style={styles.container}>
       <Animated.View style={[{ opacity: fadeAnim }]}>
-        <Text>Fading View!</Text>
+        <Text
+          style={{
+            fontSize: 25,
+            alignSelf: "center",
+            justifyContent: "center",
+          }}
+        >
+          Fading View!
+        </Text>
       </Animated.View>
       <Button title="Fade In" onPress={fadeIn} />
       <Button title="Fade out" onPress={fadeOut} />
@@ -70,7 +77,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#ecf0f1",
     padding: 8,
   },
   item: {

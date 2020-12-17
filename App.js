@@ -66,8 +66,6 @@ function HomeScreen({ navigation }) {
           />
         </LinearGradient>
       </Animatable.View>
-
-      {/* Advice */}
       <View style={{ flex: 2 }}>
         <Advice />
       </View>
@@ -81,8 +79,7 @@ function DetailsScreen({ navigation }) {
       source={require("./assets/lines.jpeg")}
       style={styles.image}
     >
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text h1>Details Screen</Text>
+      <View style={styles.details}>
         {/*       
       <Button
         title="Go to Details... again"
@@ -94,10 +91,15 @@ function DetailsScreen({ navigation }) {
         title="Go back to first screen in stack"
         onPress={() => navigation.popToTop()}
       /> */}
-        <Button title="Task List" onPress={() => navigation.navigate("ToDo")} />
-
+        <View style={{}}>
+          <Button
+            style={styles.button}
+            title="Task List"
+            onPress={() => navigation.navigate("ToDo")}
+          />
+          <Permission />
+        </View>
         {/* <FormCharacter /> */}
-        <Permission />
       </View>
     </ImageBackground>
   );
@@ -120,7 +122,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
-        // Header Style
+        // Header Style //
         screenOptions={{
           headerStyle: {
             backgroundColor: "#74caf2",
@@ -131,6 +133,7 @@ function App() {
           },
         }}
       >
+        {/* Navigation Screens */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -155,6 +158,14 @@ function App() {
 }
 
 const styles = StyleSheet.create({
+  details: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    paddingBottom: 15,
+  },
   image: {
     flex: 1,
     resizeMode: "cover",

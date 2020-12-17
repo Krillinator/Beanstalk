@@ -6,13 +6,13 @@ import {
   View,
   ScrollView,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { ListItem } from "react-native-elements";
 import { Formik } from "formik";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { BorderlessButton } from "react-native-gesture-handler";
 
 function StorageLogic() {
   const STORAGE_KEY = "@save_list";
@@ -36,16 +36,18 @@ function StorageLogic() {
     }
   };
 
+  // Initial Array
+  const [ready, setReady] = useState(false);
   const [description, setDescription] = useState([
     { name: "Benny", subtitle: "Vice president" },
   ]);
 
   useEffect(() => {
+    setReady(false);
     getData().then((value) => {
-      console.log(value, "Testing");
-
       if (value) {
         setDescription(value);
+        setReady(true);
       }
     });
   }, []);
@@ -61,7 +63,7 @@ function StorageLogic() {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: "#fff", width: 350, paddingTop: 15 }}>
         {/* FORMS */}
         <Formik
@@ -105,30 +107,42 @@ function StorageLogic() {
       {/* RENDER LIST */}
       <KeyboardAwareScrollView>
         <ScrollView>
-          <View style={styles.list}>
-            {description.map((l, i) => (
-              <ListItem key={i} bottomDivider>
-                <ListItem.Content>
-                  <ListItem.Title>{l.name}</ListItem.Title>
-                  <View style={{ alignSelf: "flex-end" }}>
-                    <ListItem.Chevron
-                      name={"delete"}
-                      size={35}
-                      color="red"
-                      onPress={() => {
-                        setDescription(
-                          description
+          {/* Loading Animation */}
+          {!ready ? (
+            <View>
+              <ActivityIndicator
+                style={{ marginTop: 50 }}
+                color="#0000ff"
+                size="large"
+              />
+            </View>
+          ) : (
+            <View style={styles.list}>
+              {description.map((l, i) => (
+                <ListItem key={i} bottomDivider>
+                  <ListItem.Content>
+                    <ListItem.Title>{l.name}</ListItem.Title>
+                    <View style={{ alignSelf: "flex-end" }}>
+                      <ListItem.Chevron
+                        name={"delete"}
+                        size={35}
+                        color="red"
+                        onPress={() => {
+                          const newItem = description
                             .slice(0, i)
-                            .concat(description.slice(i + 1))
-                        );
-                      }}
-                    ></ListItem.Chevron>
-                  </View>
-                  <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
-          </View>
+                            .concat(description.slice(i + 1));
+
+                          setDescription(newItem);
+                          storeData(newItem);
+                        }}
+                      ></ListItem.Chevron>
+                    </View>
+                    <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
+                  </ListItem.Content>
+                </ListItem>
+              ))}
+            </View>
+          )}
         </ScrollView>
       </KeyboardAwareScrollView>
     </View>
